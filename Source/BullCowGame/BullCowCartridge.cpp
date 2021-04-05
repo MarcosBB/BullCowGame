@@ -110,3 +110,11 @@ void UBullCowCartridge::processaResposta(FString input){
         }
     }
 }
+
+bool UBullCowCartridge::IsIsogram(FString palavra) const {
+    /*for (size_t i = 0; i < length; i++) {
+
+    }
+    */
+    return true;
+}
