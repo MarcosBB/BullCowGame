@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
-
+#include "HiddenWordList.h"
 
 using namespace std;
 
@@ -20,7 +20,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     //Checando a resposta do jogador
     if (!bPrimeiraVez) {
         processaResposta(Input);
-        
+
     }
     else {  //Se for a primeira vez
         Header();
@@ -33,12 +33,11 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     else {  //Se não for gameOver
         Header();
     }
+    
 }
 
 FString UBullCowCartridge::NovaPalavra() {
-    FString newWord[5] = { TEXT("agua"), TEXT("cadeira"), TEXT("palavra"), TEXT("vaca"), TEXT("lapis")};
-    return newWord[rand() % 5];
-
+    return todasAsPalavras[rand() % todasAsPalavras.Num()];
 }
 
 void UBullCowCartridge::SetUp() {
@@ -110,11 +109,16 @@ void UBullCowCartridge::processaResposta(FString input){
         }
     }
 }
-
+/*
 bool UBullCowCartridge::IsIsogram(FString palavra) const {
-    /*for (size_t i = 0; i < length; i++) {
-
+    for (int32 i = 0; i < palavra.Len(); i++) {
+        for (int32 comparacao = i + 1; i < palavra.Len(); comparacao++) {
+            if (palavra[i] == palavra[comparacao]) {
+                return false;
+            }
+        }
     }
-    */
+    
     return true;
 }
+*/

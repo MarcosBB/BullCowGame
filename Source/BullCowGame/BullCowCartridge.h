@@ -20,7 +20,7 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	void GameOver(bool bResultado, FString palavra);
 	void Header();
 	void processaResposta(FString input);
-	bool IsIsogram(FString palavra) const;
+	//bool IsIsogram(FString palavra) const;
 
  	// Your declarations go below!
 	private:
