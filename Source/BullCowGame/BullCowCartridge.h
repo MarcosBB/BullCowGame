@@ -15,12 +15,12 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	virtual void BeginPlay() override;
 	virtual void OnInput(const FString& Input) override;
 	void SetUp();
-	void Dica(FString palavra);
 	FString NovaPalavra();
 	void GameOver(bool bResultado, FString palavra);
 	void Header();
 	void processaResposta(FString input);
-	//bool IsIsogram(FString palavra) const;
+	TArray<FString> achaPalavrasValidas(TArray<FString>) const;
+	bool IsIsogram(FString palavra) const;
 
  	// Your declarations go below!
 	private:
@@ -29,5 +29,6 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	bool bGanhou;
 	bool bPrimeiraVez;
 	bool bGameOver;
+	
 };
 
