@@ -41,7 +41,7 @@ FString UBullCowCartridge::NovaPalavra() const {
 void UBullCowCartridge::SetUp() {
 
     //VARIÁVEIS
-    Lives = 10;
+    Lives = 20;
     HiddenWord = NovaPalavra();
     bPrimeiraVez = true;
     bGameOver = false;
@@ -66,13 +66,12 @@ void UBullCowCartridge::GameOver(const bool& bResultado, const FString& Palavra)
 
 void UBullCowCartridge::Header(const FString& Input) const {
     ClearScreen();
-    PrintLine(TEXT("Palavra: %s"), *HiddenWord);
+    //PrintLine(TEXT("Palavra: %s"), *HiddenWord);
     PrintLine(TEXT("A palavra tem %i letras."), HiddenWord.Len());
 
-    int32 Bulls, Cows;
-    GetBullCows(Input, Bulls, Cows);
+    FBullCowCount Pontuacao = GetBullCows(Input);
     if (IsIsogram(Input)) {
-        PrintLine(TEXT("Vidas: %i       Bulls: %i      Cows: %i"), Lives, Bulls, Cows);
+        PrintLine(TEXT("Vidas: %i       Bulls: %i      Cows: %i"), Lives, Pontuacao.Bulls, Pontuacao.Cows);
     }
     else {
         PrintLine(TEXT("Vidas: %i       !!!DEVE ser um isograma!!!"), Lives);
@@ -118,25 +117,24 @@ bool UBullCowCartridge::IsIsogram(const FString& palavra) const {
     return true;
 }
 
-void UBullCowCartridge::GetBullCows(const FString& Input, int32& ContadorDeBulls, int32& ContadorDeCows) const {
+FBullCowCount UBullCowCartridge::GetBullCows(const FString& Input) const {
     //Cow = letra que existe na palavra mas não está na posição certa
     //Bull = letra que existe na palavra e está na posição correta
     
-    ContadorDeBulls = 0;
-    ContadorDeCows = 0;
+    FBullCowCount Contador;
 
     for (int32 IndiceInput = 0; IndiceInput < Input.Len(); IndiceInput++) {
         if (Input[IndiceInput] == HiddenWord[IndiceInput]) {
-            ContadorDeBulls++;
+            Contador.Bulls++;
             continue;
         }
 
         for (size_t IndiceHidden = 0; IndiceHidden < HiddenWord.Len(); IndiceHidden++) {
             if (Input[IndiceInput] == HiddenWord[IndiceHidden]) {
-                ContadorDeCows++;
+                Contador.Cows++;
                 break;
             }
         }
     }
-
+    return Contador;
 }
