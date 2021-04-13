@@ -10,29 +10,12 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     SetUp();
     
     //RECEPÇÃO
-
-    TArray<FString> palavras = achaPalavrasValidas(todasAsPalavras);
-
-    PrintLine(TEXT("Numero de todas as palavras: %i"), todasAsPalavras.Num());
-    PrintLine(TEXT("Numero de palavras validas: %i"), palavras.Num());
     PrintLine(TEXT("Bem vindo ao Bull Cown!"));
     PrintLine(TEXT("Pressione ENTER para comecar:  "));
-    
-
 }
 
 void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player hits enter
 {
-    /*
-    if (IsIsogram(Input))
-    {
-        PrintLine(TEXT("True"));
-    }
-    else {
-        PrintLine(TEXT("False"));
-    }
-    */
-
     //Checando a resposta do jogador
     if (!bPrimeiraVez) {
         processaResposta(PlayerInput);
@@ -52,8 +35,7 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
 }
 
 FString UBullCowCartridge::NovaPalavra() {
-    TArray<FString> palavras = achaPalavrasValidas(todasAsPalavras);
-    return palavras[rand() % palavras.Num()];
+    return achaPalavrasValidas(todasAsPalavras)[FMath::RandRange(0, achaPalavrasValidas(todasAsPalavras).Num() - 1)];
 }
 
 void UBullCowCartridge::SetUp() {
