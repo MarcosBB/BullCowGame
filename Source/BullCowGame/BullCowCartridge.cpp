@@ -6,7 +6,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
 
-    
+    PalavrasValidas = achaPalavrasValidas(todasAsPalavras);
     SetUp();
     
     //RECEPÇÃO
@@ -22,7 +22,7 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
 
     }
     else {  //Se for a primeira vez
-        Header();
+        Header(PlayerInput);
         bPrimeiraVez = false;
     }
 
@@ -30,12 +30,12 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
         GameOver(bGanhou, HiddenWord);
     }
     else {  //Se não for gameOver
-        Header();
+        Header(PlayerInput);
     }
 }
 
-FString UBullCowCartridge::NovaPalavra() {
-    return achaPalavrasValidas(todasAsPalavras)[FMath::RandRange(0, achaPalavrasValidas(todasAsPalavras).Num() - 1)];
+FString UBullCowCartridge::NovaPalavra() const {
+    return PalavrasValidas[FMath::RandRange(0, PalavrasValidas.Num() - 1)];
 }
 
 void UBullCowCartridge::SetUp() {
@@ -64,10 +64,20 @@ void UBullCowCartridge::GameOver(const bool& bResultado, const FString& Palavra)
     SetUp();
 }
 
-void UBullCowCartridge::Header() {
+void UBullCowCartridge::Header(const FString& Input) const {
     ClearScreen();
-    PrintLine(TEXT("Voce tem %i vidas."), Lives);
-    PrintLine(TEXT("Tem %i letras."), HiddenWord.Len());
+    PrintLine(TEXT("Palavra: %s"), *HiddenWord);
+    PrintLine(TEXT("A palavra tem %i letras."), HiddenWord.Len());
+
+    int32 Bulls, Cows;
+    GetBullCows(Input, Bulls, Cows);
+    if (IsIsogram(Input)) {
+        PrintLine(TEXT("Vidas: %i       Bulls: %i      Cows: %i"), Lives, Bulls, Cows);
+    }
+    else {
+        PrintLine(TEXT("Vidas: %i       !!!DEVE ser um isograma!!!"), Lives);
+    }
+
 }
 
 void UBullCowCartridge::processaResposta(const FString& input){
@@ -88,13 +98,13 @@ void UBullCowCartridge::processaResposta(const FString& input){
 }
 
 TArray<FString> UBullCowCartridge::achaPalavrasValidas(const TArray<FString>& Lista) const {
-    TArray<FString> palavrasValidas;
+    TArray<FString> ListaDePalavrasValidas;
     for (int32 i = 0; i < Lista.Num(); i++) {
         if (Lista[i].Len() >= 4 && Lista[i].Len() <=8 && IsIsogram(Lista[i])) {
-            palavrasValidas.Emplace(Lista[i]);
+            ListaDePalavrasValidas.Emplace(Lista[i]);
         }
     }
-    return palavrasValidas;
+    return ListaDePalavrasValidas;
 }
 
 bool UBullCowCartridge::IsIsogram(const FString& palavra) const {
@@ -105,6 +115,28 @@ bool UBullCowCartridge::IsIsogram(const FString& palavra) const {
             }
         }
     }
-    
     return true;
+}
+
+void UBullCowCartridge::GetBullCows(const FString& Input, int32& ContadorDeBulls, int32& ContadorDeCows) const {
+    //Cow = letra que existe na palavra mas não está na posição certa
+    //Bull = letra que existe na palavra e está na posição correta
+    
+    ContadorDeBulls = 0;
+    ContadorDeCows = 0;
+
+    for (int32 IndiceInput = 0; IndiceInput < Input.Len(); IndiceInput++) {
+        if (Input[IndiceInput] == HiddenWord[IndiceInput]) {
+            ContadorDeBulls++;
+            continue;
+        }
+
+        for (size_t IndiceHidden = 0; IndiceHidden < HiddenWord.Len(); IndiceHidden++) {
+            if (Input[IndiceInput] == HiddenWord[IndiceHidden]) {
+                ContadorDeCows++;
+                break;
+            }
+        }
+    }
+
 }

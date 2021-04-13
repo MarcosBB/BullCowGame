@@ -15,12 +15,13 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	virtual void BeginPlay() override;
 	virtual void OnInput(const FString& Input) override;
 	void SetUp();
-	FString NovaPalavra();
+	FString NovaPalavra() const;
 	void GameOver(const bool& bResultado, const FString& palavra);
-	void Header();
+	void Header(const FString& Input) const;
 	void processaResposta(const FString& input);
 	TArray<FString> achaPalavrasValidas(const TArray<FString>& Lista) const;
 	bool IsIsogram(const FString& palavra) const;
+	void GetBullCows(const FString& Input, int32& ContadorDeBulls, int32& ContadorDeCows) const;
 
  	// Your declarations go below!
 	private:
@@ -29,6 +30,6 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	bool bGanhou;
 	bool bPrimeiraVez;
 	bool bGameOver;
-	
+	TArray<FString> PalavrasValidas;
 };
 
