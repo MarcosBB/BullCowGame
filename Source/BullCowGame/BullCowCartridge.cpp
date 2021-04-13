@@ -21,7 +21,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 
 }
 
-void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
+void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player hits enter
 {
     /*
     if (IsIsogram(Input))
@@ -35,7 +35,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
 
     //Checando a resposta do jogador
     if (!bPrimeiraVez) {
-        processaResposta(Input);
+        processaResposta(PlayerInput);
 
     }
     else {  //Se for a primeira vez
@@ -65,7 +65,7 @@ void UBullCowCartridge::SetUp() {
     bGameOver = false;
 }
 
-void UBullCowCartridge::GameOver(bool bResultado, FString Palavra) {
+void UBullCowCartridge::GameOver(const bool& bResultado, const FString& Palavra) {
     ClearScreen();
 
     if (!bResultado){
@@ -88,7 +88,7 @@ void UBullCowCartridge::Header() {
     PrintLine(TEXT("Tem %i letras."), HiddenWord.Len());
 }
 
-void UBullCowCartridge::processaResposta(FString input){
+void UBullCowCartridge::processaResposta(const FString& input){
     if (input == HiddenWord) {
         bGanhou = true;
         bGameOver = true;
@@ -105,17 +105,17 @@ void UBullCowCartridge::processaResposta(FString input){
     }
 }
 
-TArray<FString> UBullCowCartridge::achaPalavrasValidas(TArray<FString> lista) const {
+TArray<FString> UBullCowCartridge::achaPalavrasValidas(const TArray<FString>& Lista) const {
     TArray<FString> palavrasValidas;
-    for (int32 i = 0; i < todasAsPalavras.Num(); i++) {
-        if (todasAsPalavras[i].Len() >= 4 && todasAsPalavras[i].Len() <=8 && IsIsogram(todasAsPalavras[i])) {
-            palavrasValidas.Emplace(todasAsPalavras[i]);
+    for (int32 i = 0; i < Lista.Num(); i++) {
+        if (Lista[i].Len() >= 4 && Lista[i].Len() <=8 && IsIsogram(Lista[i])) {
+            palavrasValidas.Emplace(Lista[i]);
         }
     }
     return palavrasValidas;
 }
 
-bool UBullCowCartridge::IsIsogram(FString palavra) const {
+bool UBullCowCartridge::IsIsogram(const FString& palavra) const {
     for (int32 i = 0; i < palavra.Len(); i++) {
         for (int32 comparacao = i + 1; comparacao < palavra.Len(); comparacao++) {
             if (palavra[i] == palavra[comparacao]) {
